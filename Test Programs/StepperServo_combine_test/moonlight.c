@@ -26,14 +26,21 @@ void pcaScenario(){/* function pcaScenario */
   int tempo = 383; //69pbm/60/3(tripelets)*1000
   int[3] triplet = {0,0,0}
   for (int i=0; i<nbPCAServo; i++) {
-    //bars 1-2
+
+    
+    //bars 1-2 //Root note G - 1
     play_triplet(triplet,2,7,10,tempo,8);
-    //bar 3 - 3.5
+    //bar 3 - 3.5 
     play_triplet(triplet,3,7,10,tempo,2);
     //bar 3.5-4
     play_triplet(triplet,3,8,12,tempo,2);
-    //bar 4
-    play_triplet(triplet,3,8,12,tempo,2);
+    //bar 4 //Root note F - 1
+    play_triplet(triplet,,9,14,tempo,1);
+    play_triplet(triplet,4,9,12,tempo,1);
+    play_triplet(triplet,4,9,14,tempo,1);
+    play_triplet(triplet,4,9,12,tempo,1);
+
+
 }
 
 int jointToImp(double x,int i){/* function jointToImp */
