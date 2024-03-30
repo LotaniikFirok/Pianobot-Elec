@@ -12,6 +12,7 @@
 #define motorInterfaceType 1
 #define pulserate 1000
 #define accelrate 10000
+#define limit_switch 8
 
 
 
@@ -25,8 +26,8 @@ Adafruit_PWMServoDriver pca= Adafruit_PWMServoDriver(0x40);
 
 AccelStepper stepper = AccelStepper(motorInterfaceType, stepPin, dirPin);
 
-int down_pos = 2200;
-int release_pos = 1500;
+int down_pos = 2000;
+int release_pos = 1000;
 
 void setup(){
 //Init Serial USB
@@ -49,7 +50,7 @@ void pcaScenario(){/* function pcaScenario */
   Serial.print("starting...");
   int triplet[3] = {0,0,0};
 
-  
+  int middle;
   // pca.setPin(3,0,true);
   // delay(1000);
   // release(3);
@@ -66,8 +67,16 @@ void pcaScenario(){/* function pcaScenario */
     delay(500);
     pca.setPin(i,0,true);
   }
+
+  while(digitalRead(limit_switch) == HIGH){
+  stepper.setSpeed(-1000);
+  stepper.runSpeed();
+  }
+  delay(100);
+  stepperMotorControl(9600);
+  
   Serial.print("reset done");
-  delay(5000);
+  delay(7000);
 
     
     //bars 1-2 //Root note G - 1
@@ -186,7 +195,32 @@ void pcaScenario(){/* function pcaScenario */
     play_triplet(triplet,1,8,10,tempo,1);
     release(13);
 
-    stepperMotorControl(2*notesize);
+    stepperMotorControl(notesize);
+
+    // Bar 14 root F
+    holdkey(14);
+    play_triplet(triplet,2,7,10,tempo,2);
+    release(14);
+    holdkey(14);
+    play_triplet(triplet,2,6,9,tempo,2);
+    release(14);
+
+    stepperMotorControl(3*notesize);
+
+    // Bar 15 root B
+    play_triplet(triplet,1,4,8,tempo,2);
+    play_triplet(triplet,1,5,8,tempo,1);
+    holdkey(13);
+    play_triplet(triplet,1,5,8,tempo,1);
+    release(13);
+    stepperMotorControl(-2*notesize);
+    delay(5000);
+    // //Bar 16 root (C actually B)
+    // stepperMotorControl(-1*notesize);
+    // play_triplet(triplet,13,5,8,tempo,1);
+
+
+    
 }
 
 void stepperMotorControl(int targetPosition) {
